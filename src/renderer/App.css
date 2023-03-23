@@ -1,0 +1,46 @@
+.container {
+  max-width: 70%;
+  margin: auto;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  width: 140px;
+  height: 50px;
+  font-size: 22px;
+  font-weight: 400;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 10px;
+  background-color: rgb(215, 215, 215);
+  border: 0.5px solid rgb(57, 57, 57);
+  cursor: pointer;
+  margin-right: 20px;
+  margin-top: 40px;
+}
+
+.model {
+  cursor: crosshair;
+  position: relative;
+  width: 100%;
+}
+
+.modelPic {
+  width: 100%;
+}
+
+.pin {
+  position: absolute;
+}
+
+.pin:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
