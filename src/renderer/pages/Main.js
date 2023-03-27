@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import model from '../../../assets/mimar/model.png';
 import pinOn from '../../../assets/mimar/pinOn.png';
 import pinOff from '../../../assets/mimar/pinOff.png';
-
-import { toast } from 'react-toastify';
 
 import { readFromFile, writeToFile } from '../utils';
 

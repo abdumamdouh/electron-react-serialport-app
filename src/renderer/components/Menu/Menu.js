@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './style.scss';
 import {
   bag,
@@ -12,7 +12,10 @@ import {
 } from '../../../../assets/mimar/menu';
 
 function Menu() {
-  const [rotation, setRotation] = useState(0); // initial rotation angle
+  const [angle, setAngle] = useState(0);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const prevX = useRef(null);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleRotation = () => {
@@ -20,6 +23,47 @@ function Menu() {
   };
 
   const handleMenuItem = (item) => console.log('menu item', item);
+
+  const onMouseDown = (e) => {
+    console.log('handleMouseDown', e);
+    setIsMouseDown(true);
+  };
+
+  const onMouseMove = (e) => {
+    if (isMouseDown) {
+      if (prevX.current) {
+        const direction = e.clientX - prevX.current > 0 ? 1 : -1;
+        const newAngle = angle + direction * Math.abs(e.movementX);
+        setAngle(newAngle);
+      }
+      prevX.current = e.clientX;
+    }
+  };
+
+  const onMouseUp = (e) => {
+    console.log('onMouseUp', e);
+    setIsMouseDown(false);
+  };
+
+  const onTouchStart = (e) => {
+    setIsHolding(true);
+    prevX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    setIsHolding(false);
+  };
+
+  const onTouchMove = (e) => {
+    if (isHolding) {
+      if (prevX.current) {
+        const direction = e.touches[0].clientX - prevX.current > 0 ? 1 : -1;
+        const newAngle = angle + direction * Math.abs(e.touches[0].movementX);
+        setAngle(newAngle);
+      }
+      prevX.current = e.touches[0].clientX;
+    }
+  };
 
   if (!isOpen)
     return (
@@ -44,8 +88,19 @@ function Menu() {
       }}
     >
       <ul
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        onMouseMove={onMouseMove}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onTouchMove={onTouchMove}
         className={isOpen ? 'active' : ''}
-        // style={{ transform: `rotate(${rotation}deg)` }}
+        style={{
+          transform: `rotate(${angle}deg)`,
+          transition: 'transform 0.5s ease-out',
+          position: 'absolute',
+          bottom: -155,
+        }}
       >
         <li onClick={() => handleMenuItem('bag')}>
           <a href="#">
@@ -77,7 +132,7 @@ function Menu() {
             <img src={cloud} alt="cloud" />
           </a>
         </li>
-        <li onClick={() => setIsOpen(!isOpen)} class="close">
+        <li onClick={() => setIsOpen(!isOpen)} className="close">
           <a href="#">
             <img src={close} alt="close" />
           </a>
