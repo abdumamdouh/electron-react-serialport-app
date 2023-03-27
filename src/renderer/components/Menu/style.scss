@@ -1,0 +1,152 @@
+@import '~compass-mixins/lib/compass/css3';
+// @import "compass/css3";
+
+// can touch this!
+$items: 6;
+$size: 150;
+$bgcolor: #2f3438d9;
+
+// can't touch this!
+$deg: 360 / $items;
+$unrotate: -(90 - $deg)/2;
+$skew: 90 - $deg;
+
+ul {
+  @include transform(scale(0.2));
+  @include transition(0.3s ease-out all);
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  width: #{$size * 2}px;
+  height: #{$size * 2}px;
+
+  li {
+    position: absolute;
+    width: #{$size}px;
+    height: #{$size}px;
+    -webkit-transform-origin: 100% 100%;
+    overflow: hidden;
+    display: none;
+
+    a {
+      color: lighten($bgcolor, 20%);
+      display: block;
+      width: #{$size * 2}px;
+      height: #{$size * 2}px;
+      border-radius: 50%;
+      text-align: center;
+      background: $bgcolor;
+      font-size: 25px;
+      // border: 2px white solid;
+    }
+
+    &:nth-child(odd) {
+      a {
+        background: lighten($bgcolor, 2%);
+        // border: 2px white solid;
+      }
+    }
+
+    @for $i from 1 through $items {
+      &:nth-child(#{$i}) {
+        display: block;
+        @include transform(rotate(#{$i * $deg}deg) skew(#{$skew}deg));
+
+        a {
+          line-height: #{$size/2}px;
+          @include transform(skew(#{-$skew}deg) rotate(-#{$deg}deg));
+
+          &:hover {
+            background: #009abc;
+            // border: 2px white solid;
+            color: white;
+          }
+        }
+      }
+    }
+
+    &.close {
+      width: 150px;
+      height: 150px;
+      background: #1e1e1e;
+      border-radius: 50%;
+      position: absolute;
+      left: calc(50% - 75px);
+      top: calc(50% - 75px);
+      display: block;
+      @include transform(scale(3.8) rotate(45deg));
+      @include transition(0.3s ease-in-out all);
+      -webkit-transform-origin: 50% 50%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        background: none;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        color: #ccc;
+      }
+    }
+  }
+
+  &.active {
+    @include transform(scale(1));
+
+    .close {
+      @include transform(rotate(0deg));
+    }
+  }
+}
+
+li:nth-child(1) {
+  img {
+    @include transform(rotate(#{6 * $deg}deg));
+  }
+}
+
+li:nth-child(2) {
+  img {
+    @include transform(rotate(#{5 * $deg}deg));
+  }
+}
+
+li:nth-child(3) {
+  img {
+    @include transform(rotate(#{4 * $deg}deg));
+  }
+}
+
+li:nth-child(4) {
+  img {
+    @include transform(rotate(#{3 * $deg}deg));
+  }
+}
+
+li:nth-child(5) {
+  img {
+    @include transform(rotate(#{2 * $deg}deg));
+  }
+}
+
+li:nth-child(6) {
+  img {
+    @include transform(rotate(#{1 * $deg}deg));
+  }
+}
+
+.swipe-button {
+  position: absolute;
+  bottom: -40px;
+  z-index: 5;
+  left: calc(50% - 120px);
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.1s;
+  }
+}

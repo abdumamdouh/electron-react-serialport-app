@@ -1,3 +1,11 @@
+html {
+  background: #404040;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 .container {
   max-width: 70%;
   margin: auto;

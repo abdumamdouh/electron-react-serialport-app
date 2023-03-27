@@ -12,12 +12,12 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { SerialPort } from 'serialport';
+// import { SerialPort } from 'serialport';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import Store from 'electron-store';
+// import Store from 'electron-store';
 
-const store = new Store();
+// const store = new Store();
 
 export default class AppUpdater {
   constructor() {
@@ -27,19 +27,19 @@ export default class AppUpdater {
   }
 }
 
-const port = new SerialPort({
-  path: '/dev/tty-usbserial1',
-  baudRate: 57600,
-});
-console.log(port);
+// const port = new SerialPort({
+//   path: '/dev/tty-usbserial1',
+//   baudRate: 57600,
+// });
+// console.log(port);
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
+// ipcMain.on('ipc-example', async (event, arg) => {
+//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+//   console.log(msgTemplate(arg));
+//   event.reply('ipc-example', msgTemplate('pong'));
+// });
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -82,6 +82,7 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     show: false,
     fullscreen: true,
+    autoHideMenuBar: true, // hide the default menu bar
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -127,12 +128,12 @@ const createWindow = async () => {
  */
 
 // IPC listener
-ipcMain.on('electron-store-get', async (event, val) => {
-  event.returnValue = store.get(val);
-});
-ipcMain.on('electron-store-set', async (event, key, val) => {
-  store.set(key, val);
-});
+// ipcMain.on('electron-store-get', async (event, val) => {
+//   event.returnValue = store.get(val);
+// });
+// ipcMain.on('electron-store-set', async (event, key, val) => {
+//   store.set(key, val);
+// });
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
