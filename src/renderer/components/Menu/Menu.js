@@ -21,11 +21,13 @@ function Menu() {
   const handleMenuItem = (item) => console.log('menu item', item);
 
   const onMouseDown = (e) => {
+    e.preventDefault();
     console.log('handleMouseDown', e);
     setIsMouseDown(true);
   };
 
   const onMouseMove = (e) => {
+    e.preventDefault();
     if (isMouseDown) {
       if (prevX.current) {
         const direction = e.clientX - prevX.current > 0 ? 1 : -1;
@@ -37,6 +39,7 @@ function Menu() {
   };
 
   const onMouseUp = (e) => {
+    e.preventDefault();
     console.log('onMouseUp', e);
     setIsMouseDown(false);
   };
@@ -46,11 +49,13 @@ function Menu() {
     prevX.current = e.touches[0].clientX;
   };
 
-  const onTouchEnd = () => {
+  const onTouchEnd = (e) => {
+    e.preventDefault();
     setIsMouseDown(false);
   };
 
   const onTouchMove = (e) => {
+    e.preventDefault();
     if (isMouseDown) {
       if (prevX.current) {
         const direction = e.touches[0].clientX - prevX.current > 0 ? 1 : -1;
