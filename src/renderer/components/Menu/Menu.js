@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './style.scss';
 import {
   bag,
@@ -11,12 +11,26 @@ import {
   swipe,
 } from '../../../../assets/mimar/menu';
 
-function Menu() {
-  const [angle, setAngle] = useState(0);
+const Menu = () => {
+  const [angle, setAngle] = useState(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [isTouchDown, setIsTouchDown] = useState(false);
   const prevX = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // prevent scroll on touch
+    const handleTouchMove = (event) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
 
   const handleMenuItem = (item) => console.log('menu item', item);
 
@@ -44,23 +58,22 @@ function Menu() {
     setIsMouseDown(false);
   };
 
+  // touch events
+
   const onTouchStart = (e) => {
-    setIsMouseDown(true);
-    prevX.current = e.touches[0].clientX;
+    setIsTouchDown(true);
+    if (!prevX) prevX.current = e.touches[0].clientX;
   };
 
   const onTouchEnd = (e) => {
-    e.preventDefault();
-    setIsMouseDown(false);
+    setIsTouchDown(false);
   };
 
   const onTouchMove = (e) => {
-    e.preventDefault();
-    if (isMouseDown) {
+    if (isTouchDown) {
       if (prevX.current) {
         const direction = e.touches[0].clientX - prevX.current > 0 ? 1 : -1;
-        const newAngle = angle + direction * Math.abs(e.touches[0].movementX);
-        setAngle(newAngle);
+        setAngle((prev) => prev + 1.5 * direction);
       }
       prevX.current = e.touches[0].clientX;
     }
@@ -86,6 +99,7 @@ function Menu() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'hidden',
       }}
     >
       <ul
@@ -98,7 +112,7 @@ function Menu() {
         className={isOpen ? 'active' : ''}
         style={{
           transform: `rotate(${angle}deg)`,
-          transition: 'transform 0.5s ease-out',
+          transition: `transform ${isTouchDown ? '0s' : '0.05 s'} ease-out`,
           position: 'absolute',
           bottom: -155,
         }}
@@ -141,6 +155,6 @@ function Menu() {
       </ul>
     </div>
   );
-}
+};
 
 export default Menu;
