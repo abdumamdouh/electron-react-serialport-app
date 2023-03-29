@@ -18,10 +18,6 @@ function Menu() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleRotation = () => {
-    setRotation(rotation + 45); // increment the rotation angle by 45 degrees on each click
-  };
-
   const handleMenuItem = (item) => console.log('menu item', item);
 
   const onMouseDown = (e) => {
@@ -46,16 +42,16 @@ function Menu() {
   };
 
   const onTouchStart = (e) => {
-    setIsHolding(true);
+    setIsMouseDown(true);
     prevX.current = e.touches[0].clientX;
   };
 
   const onTouchEnd = () => {
-    setIsHolding(false);
+    setIsMouseDown(false);
   };
 
   const onTouchMove = (e) => {
-    if (isHolding) {
+    if (isMouseDown) {
       if (prevX.current) {
         const direction = e.touches[0].clientX - prevX.current > 0 ? 1 : -1;
         const newAngle = angle + direction * Math.abs(e.touches[0].movementX);
